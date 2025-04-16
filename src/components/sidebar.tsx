@@ -20,7 +20,6 @@ export function Sidebar({onAddNote}: SidebarProps) {
   const [noteContent, setNoteContent] = useState('');
   const [suggestedTitles, setSuggestedTitles] = useState<string[]>([]);
   const {toast} = useToast();
-  const [audioUrl, setAudioUrl] = useState('');
 
   const handleStartRecording = () => {
     setIsRecording(true);
@@ -34,7 +33,6 @@ export function Sidebar({onAddNote}: SidebarProps) {
     setIsRecording(false);
     // Simulate audio URL, replace with actual recording logic later.
     const fakeAudioUrl = 'https://example.com/fake-audio.wav';
-    setAudioUrl(fakeAudioUrl);
 
     try {
       const transcriptionResult = await transcribeVoiceNote({
@@ -94,7 +92,6 @@ export function Sidebar({onAddNote}: SidebarProps) {
     setNoteTitle('');
     setNoteContent('');
     setSuggestedTitles([]);
-    setAudioUrl('');
 
     toast({
       title: 'Success',
@@ -126,13 +123,6 @@ export function Sidebar({onAddNote}: SidebarProps) {
           onChange={e => setNoteContent(e.target.value)}
         />
       </div>
-
-      {audioUrl && (
-        <div className="mb-4">
-          <p>Voice Note:</p>
-          <audio src={audioUrl} controls />
-        </div>
-      )}
 
       <div className="flex gap-2 mb-4">
         <Button
