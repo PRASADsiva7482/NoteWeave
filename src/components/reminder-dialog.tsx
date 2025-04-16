@@ -8,10 +8,10 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import {Calendar} from '@/components/ui/calendar';
 import {Button} from '@/components/ui/button';
+import {setReminder} from '@/services/reminder';
 
 interface ReminderDialogProps {
   noteId: string;
@@ -20,14 +20,26 @@ interface ReminderDialogProps {
 }
 
 export function ReminderDialog({noteId, isOpen, onClose}: ReminderDialogProps) {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
-  const handleSetReminder = () => {
+  const handleSetReminder = async () => {
     if (selectedDate) {
-      // TODO: Implement actual reminder setting logic.
-      console.log(`Reminder set for note ${noteId} at ${selectedDate}`);
-      onClose();
+      try {
+        await setReminder({
+          noteId: noteId,
+          dateTime: selectedDate,
+        });
+        console.log(`Reminder set for note ${noteId} at ${selectedDate}`);
+        onClose();
+      } catch (error) {
+        console.error('Failed to set reminder:', error);
+        // TODO: Implement error handling (e.g., display an error message to the user)
+      }
     }
+  };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date ? new Date(date) : undefined);
   };
 
   return (
@@ -40,7 +52,7 @@ export function ReminderDialog({noteId, isOpen, onClose}: ReminderDialogProps) {
         <Calendar
           mode="single"
           selected={selectedDate}
-          onSelect={setSelectedDate}
+          onSelect={handleDateSelect}
         />
         <div className="flex justify-end mt-4">
           <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
