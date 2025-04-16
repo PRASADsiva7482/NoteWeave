@@ -39,7 +39,7 @@ export function NoteList({notes, onDeleteNote}: NoteListProps) {
       month: 'long',
       day: 'numeric',
     };
-    return date.toLocaleDateString(undefined, options);
+    return date.toLocaleDateString('en-US', options);
   };
 
   return (
